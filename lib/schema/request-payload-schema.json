@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "button": {
+      "id": "button",
+      "type": "string",
+      "required": true
+    },
+    "action": {
+      "id": "action",
+      "type": "string",
+      "required": true
+    },
+    "extra": {
+      "id": "extra",
+      "type": "string",
+      "required": true
+    },
+    "callback": {
+      "id": "callback",
+      "type": "string",
+      "required": false
+    }
+  }
+}

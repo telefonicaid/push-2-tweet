@@ -1,0 +1,101 @@
+#!/bin/bash
+#
+# push2tweet         Start/Stop the Push 2 Tweet
+#
+# chkconfig: 2345 99 60
+# description: Push 2 Tweet for Telefonica's IoT Platform
+### BEGIN INIT INFO
+# Provides: push2Tweet
+# Required-Start: $local_fs $syslog
+# Required-Stop: $local_fs $syslog
+# Default-Start:  345
+# Default-Stop: 90
+# Short-Description: run push2Tweet
+# Description: The Push 2 Tweet is a bridge between Third party protocols
+# protocol and the NGSI protocol used internally by Telefonica's IoT Platform.
+### END INIT INFO
+
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of the push-2-tweet.
+#
+# the push-2-tweet is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# the push-2-tweet is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with the push-2-tweet. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+
+. /etc/rc.d/init.d/functions
+
+PARAM=$1
+NAME=push-2-tweet
+EXECUTABLE=bin/push-2-tweet
+P2T_PATH=/opt/push2Tweet
+PIDFILE=$P2T_PATH/$NAME.pid
+LOG_PATH=/var/log/push2Tweet/push2Tweet.log
+
+p2t_start()
+{
+    printf "%-50s" "Starting ${NAME}..."
+    cd $P2T_PATH
+    if [[ -x ${EXECUTABLE} ]]; then
+        cd $P2T_PATH
+        su $P2T_USER -c "cd $P2T_PATH; nohup ${EXECUTABLE} &>> $LOG_PATH & echo \$! > $PIDFILE"
+        echo "Success"
+    else
+        printf "%s\n" "Fail - missing ${EXECUTABLE} executable"
+        exit 1
+    fi
+}
+
+p2t_stop()
+{
+    printf "%-50s" "Stopping $NAME..."
+    if [ -f "${PIDFILE}" ]; then
+        kill -9 $(cat ${PIDFILE})
+        rm -f ${PIDFILE}
+        printf "%s\n" "$(success)"
+    else
+        printf "%s\n" "$(failure)"
+    fi
+}
+
+p2t_status()
+{
+    status -p ${PIDFILE} ${EXECUTABLE}
+}
+
+case ${PARAM} in
+
+    'start')
+        echo "Starting..."
+        status -p ${PIDFILE} ${EXECUTABLE} && exit 0
+        p2t_start
+        ;;
+
+    'stop')
+        echo "Stopping..."
+        status -p ${PIDFILE} ${EXECUTABLE} || exit 0
+        p2t_stop
+        ;;
+
+    'restart')
+        p2t_stop
+        p2t_start
+        ;;
+
+    'status')
+        p2t_status
+        ;;
+
+esac
