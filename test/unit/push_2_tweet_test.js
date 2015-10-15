@@ -25,7 +25,7 @@
 
 var push2Tweet = require('../../lib/push_2_tweet');
 var p2tConfig = require('../../lib/push_2_tweet_configuration');
-var testHelper = require('./context_adapter_test_helper');
+var testHelper = require('./push_2_tweet_test_helper');
 var hapi = require('hapi');
 var request = require('request');
 
