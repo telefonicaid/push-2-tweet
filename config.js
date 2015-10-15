@@ -31,7 +31,7 @@
   config.server = {
     // The host where the Push 2 Tweet server will be started. Default value: "localhost".
     host: 'localhost',
-    // The port where the Push 2 Tweet server will be listening. Default value: "8666".
+    // The port where the Push 2 Tweet server will be listening. Default value: "8777".
     port: '8777',
     // The path where the Push 2 Tweet server will be expecting requests. Default value: "/v1".
     path: '/v1',
@@ -62,7 +62,19 @@
     consumerKey: '',
     consumerSecret: '',
     accessTokenKey: '',
-    accessTokenSecret: ''
+    accessTokenSecret: '',
+    status: [
+      // Possible variables to use in the Twitter statuses are:
+      //  #button: it will be substituted by the value of the button property received in the request
+      //  #action: it will be substituted by the value of the action property received in the request
+      //  #extra: it will be substituted by the value of the extra property received in the request
+      //  #date: it will be substituted by the current date
+      'Se ha pulsado el bóton "#button" el #date',
+      'Acaba de pulsar el bóton "#button" el #date',
+      'Tremenda pulsación en el bóton "#button" el #date',
+      'Hemos recibido un click muy fuerte en el bóton "#button" el #date',
+      'Gran pulsación en el bóton "#button" el #date'
+    ]
   };
 
   module.exports = config;
